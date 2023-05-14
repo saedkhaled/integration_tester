@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:integration_tester/extensions.dart';
+import 'package:integration_tester/report_generator.dart';
 
 import 'helper.dart';
 import 'test_case.dart';
@@ -64,6 +65,8 @@ class IntegrationTester {
         await testCase.run();
         await testCase.test();
       }
+
+      print(ReportGenerator(testCases: testCases).generate());
     });
   }
 }

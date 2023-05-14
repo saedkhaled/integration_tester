@@ -10,6 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'helper.dart';
 
 class TestCase {
+
+  // the result of the test case
+  late final bool result;
+
   // the name of the test case
   final String name;
 
@@ -45,9 +49,11 @@ class TestCase {
       try {
         expect(actuals[i], expects[i]);
       } catch (e) {
+        result = false;
         return false;
       }
     }
+    result = true;
     return true;
   }
 }
