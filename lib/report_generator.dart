@@ -17,7 +17,7 @@ class ReportGenerator {
     for (var testCase in testCases) {
       buffer.write('<tr>');
       buffer.write('<td>${testCase.name}</td>');
-      buffer.write('<td>${testCase.result}</td>');
+      buffer.write('<td>${testCase.result ? 'success' : 'fail'}</td>');
       buffer.write('</tr>');
     }
 
