@@ -1,4 +1,5 @@
-import 'package:faker/faker.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -32,6 +33,10 @@ class IntegrationTester {
   // cases and set them to the testCases variable
   late final TestCasesBuilder _builder;
 
+  // the binding of the integration test that is used to take screenshots of the integration test
+  // and to close the integration test when it is finished testing it and return the result of the integration test as a future
+  late final IntegrationTestWidgetsFlutterBinding binding;
+
   IntegrationTester({
     required this.description,
     required this.init,
@@ -42,14 +47,14 @@ class IntegrationTester {
     // init the integration test
     init();
     // make sure IntegrationTestWidgetsFlutterBinding is initialized
-    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+    binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
     // set the flag to true to indicate that the integration test is ready
     _isInitialized = true;
   }
 
   // start the integration test with the given MaterialApp and return a future of void that completes when the integration test is finished
   // @param app: the MaterialApp of the integration test
-  void start(MaterialApp app) async{
+  void start(MaterialApp app) async {
     // make sure the integration test is initialized
     assert(_isInitialized, 'The integration test is not initialized');
     // run the integration test with the given description
@@ -61,9 +66,12 @@ class IntegrationTester {
       testCases = _builder(tester);
       // run the test cases one by one and wait for each one to finish
       for (var testCase in testCases) {
+        binding.takeScreenshot(testCase.name);
         await testCase.run();
+        binding.takeScreenshot(testCase.name);
         await testCase.test();
       }
+      print(binding.reportData);
 
       print(generateHtmlReport(testCases));
     });
