@@ -66,9 +66,9 @@ class IntegrationTester {
       testCases = _builder(tester);
       // run the test cases one by one and wait for each one to finish
       for (var testCase in testCases) {
-        binding.takeScreenshot(testCase.name);
+        await binding.takeScreenshot(testCase.name);
         await testCase.run();
-        binding.takeScreenshot(testCase.name);
+        await binding.takeScreenshot(testCase.name);
         await testCase.test();
       }
       print(binding.reportData);
