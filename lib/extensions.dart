@@ -35,6 +35,15 @@ extension TesterExtensions on WidgetTester {
     await enterText(find.byKey(key, skipOffstage: false), Faker().lorem.word());
   }
 
+  // scroll to a widget with the given key and make sure it is visible on the screen
+  // before continuing the test case execution then enter a random text
+  // into the widget and wait for the widget to update
+  // @param key the key of the widget to scroll to and enter a random text into
+  Future fillFieldRandomEmail({required Key key}) async {
+    await ensureVisible(find.byKey(key, skipOffstage: false));
+    await enterText(find.byKey(key, skipOffstage: false), Faker().internet.email());
+  }
+
   // pump the given MaterialApp and wait for it to finish
   // @param app the MaterialApp to pump
   Future runApp(MaterialApp app) async {
