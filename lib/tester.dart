@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -9,7 +7,6 @@ import 'helper.dart';
 import 'test_case.dart';
 
 class IntegrationTester {
-
   // a flag that indicates whether the integration test is initialized or not
   bool _isInitialized = false;
 
@@ -37,10 +34,13 @@ class IntegrationTester {
   // and to close the integration test when it is finished testing it and return the result of the integration test as a future
   late final IntegrationTestWidgetsFlutterBinding binding;
 
+  final bool enableScreenshots;
+
   IntegrationTester({
     required this.description,
     required this.init,
     required TestCasesBuilder builder,
+    this.enableScreenshots = true,
   }) {
     // init the test cases builder
     _builder = builder;
@@ -66,9 +66,13 @@ class IntegrationTester {
       testCases = _builder(tester);
       // run the test cases one by one and wait for each one to finish
       for (var testCase in testCases) {
-        await binding.takeScreenshot(testCase.name);
+        if (enableScreenshots) {
+          await binding.takeScreenshot(testCase.name);
+        }
         await testCase.run();
-        await binding.takeScreenshot(testCase.name);
+        if (enableScreenshots) {
+          await binding.takeScreenshot(testCase.name);
+        }
         await testCase.test();
       }
       print(binding.reportData);
